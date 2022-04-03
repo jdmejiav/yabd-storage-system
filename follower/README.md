@@ -25,4 +25,15 @@ Linux: close the terminal, kill the process or press control + c
 
 # Remember
 
-Follower runs once per operating system or machine due to the IP that is the key for the leader.
+Follower runs once per operating system or machine due to the IP that is the key for the leader, also if the leader use another ip you need to update this information on the self code
+
+```python
+self={
+        "LEADER_IP":'192.168.0.141', #Update ip here
+        "LEADER_PORT":8001,
+        "HOSTNAME" : socket.gethostname(),
+        "HOST" : extract_ip(),
+        "PORT":8888,
+        "HEADER_LENGTH": 30,
+    }
+```
