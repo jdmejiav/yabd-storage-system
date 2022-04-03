@@ -29,4 +29,4 @@ U for update a file already exist
 D for delete a file alredy exist
 E for exit
 
-The only thing that you need to do is choose the an option and give the required information
+The only thing that you need to do is choose the an option and give the required information.
