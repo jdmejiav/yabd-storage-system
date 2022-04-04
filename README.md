@@ -44,7 +44,7 @@ Before start you need to install docker and docker-compose
 
 ## Docker Compose
 
-[Install docker-compose](https://docs.docker.com/compose/install/)
+* [Install docker-compose](https://docs.docker.com/compose/install/)
 
 ## Run 
 
