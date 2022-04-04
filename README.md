@@ -3,6 +3,12 @@ Yabd-storage-system
 
 Project01 for the subject "Topicos de telematica"
 
+Team Members
+
+* Juan Diego Mejia Vargas [![GitHub-Mark-Light-32px](https://user-images.githubusercontent.com/53051438/128283510-7d92c6a9-9c3e-4b22-b1ce-7786d951ef65.png)](https://github.com/jdmejiav) jdmejiav@eafit.edu.co
+* Luis Angel Jaimes Mora [![GitHub-Mark-Light-32px](https://user-images.githubusercontent.com/53051438/128283510-7d92c6a9-9c3e-4b22-b1ce-7786d951ef65.png)](https://github.com/lajaimesm) lajaimesm@eafit.edu.co
+* Esteban Gonzalez Tamayo [![GitHub-Mark-Light-32px](https://user-images.githubusercontent.com/53051438/128283510-7d92c6a9-9c3e-4b22-b1ce-7786d951ef65.png)](https://github.com/egonzalezt) egonzalezt@eafit.edu.co
+
 # Setup
 
 To run the client, leader o follower you need to do these steps
@@ -32,13 +38,13 @@ To run multiple instances of the follower the team proposes Docker compose becau
 Before start you need to install docker and docker-compose
 
 ## Docker engine
-[Install on Windows](https://docs.docker.com/desktop/windows/install/)
-[Install on GNU Linux](https://docs.docker.com/engine/install/)
-[Install on OSX](https://docs.docker.com/desktop/mac/install/)
+* [Install on Windows](https://docs.docker.com/desktop/windows/install/)
+* [Install on GNU Linux](https://docs.docker.com/engine/install/)
+* [Install on OSX](https://docs.docker.com/desktop/mac/install/)
 
 ## Docker Compose
 
-[Install docker-compose](https://docs.docker.com/compose/install/)
+* [Install docker-compose](https://docs.docker.com/compose/install/)
 
 ## Run 
 
