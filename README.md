@@ -38,9 +38,9 @@ To run multiple instances of the follower the team proposes Docker compose becau
 Before start you need to install docker and docker-compose
 
 ## Docker engine
-[Install on Windows](https://docs.docker.com/desktop/windows/install/)
-[Install on GNU Linux](https://docs.docker.com/engine/install/)
-[Install on OSX](https://docs.docker.com/desktop/mac/install/)
+* [Install on Windows](https://docs.docker.com/desktop/windows/install/)
+* [Install on GNU Linux](https://docs.docker.com/engine/install/)
+* [Install on OSX](https://docs.docker.com/desktop/mac/install/)
 
 ## Docker Compose
 
