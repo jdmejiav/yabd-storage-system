@@ -1,0 +1,103 @@
+version: '3.4'
+
+services:
+  leader:
+    image: leader
+    ports: 
+      - 8001:8001
+    build:
+      context: .
+      dockerfile: ./leader/Dockerfile
+    networks:
+      backend:
+        ipv4_address: 172.16.238.200
+  
+  follower0:
+    image: follower
+    volumes:
+      - type: bind
+        source: /home/estebangt/resources/follower0
+        target: /app
+    ports: 
+      - 8880:8888
+    build:
+      context: .
+      dockerfile: ./follower/Dockerfile   
+    networks:
+      - backend 
+  
+  follower1:
+    image: follower
+    volumes:
+      - type: bind
+        source: /home/estebangt/resources/follower1
+        target: /app
+    ports: 
+      - 8881:8888
+    build:
+      context: .
+      dockerfile: ./follower/Dockerfile   
+    networks:
+      - backend 
+  follower2:
+    image: follower
+    volumes:
+      - type: bind
+        source: /home/estebangt/resources/follower2
+        target: /app
+    ports: 
+      - 8882:8888
+    build:
+      context: .
+      dockerfile: ./follower/Dockerfile   
+    networks:
+      - backend 
+  follower3:
+    image: follower
+    volumes:
+      - type: bind
+        source: /home/estebangt/resources/follower3
+        target: /app
+    ports: 
+      - 8883:8888
+    build:
+      context: .
+      dockerfile: ./follower/Dockerfile   
+    networks:
+      - backend 
+
+  follower4:
+    image: follower
+    volumes:
+      - type: bind
+        source: /home/estebangt/resources/follower4
+        target: /app
+    ports: 
+      - 8884:8888
+    build:
+      context: .
+      dockerfile: ./follower/Dockerfile   
+    networks:
+      - backend 
+
+  follower5:
+    image: follower
+    volumes:
+      - type: bind
+        source: /home/estebangt/resources/follower5
+        target: /app
+    ports: 
+      - 8885:8888
+    build:
+      context: .
+      dockerfile: ./follower/Dockerfile   
+    networks:
+      - backend  
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1
