@@ -52,3 +52,9 @@ docker-compose up
 * Once you run this command on your docker desktop you will see the docker compose running 6 follower 0 - 5 and one leader.
 * Run client with your pc private ip like 192.168.1.1 or your cloud instace public ip like "50.20.2.1"
 * You can modify on docker-compose.yaml the volumes, the team decide to binding the volumes for demostrative uses.
+
+To kill the docker-compose run
+
+```bash
+docker-compose kill -s SIGINT
+```
