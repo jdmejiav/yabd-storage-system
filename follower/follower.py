@@ -143,22 +143,6 @@ def reveal_to_leader(self):
         print(message)
         client_socket.send(message_header+message)
 
-    '''
-    #when leader returns tables
-    datarev=b''
-    while True:
-        val=client_socket.recv(30000)
-        if not val:
-            break
-        else:
-            datarev+=val
-    print(datarev)
-
-    client_socket.close()
-    del client_socket
-    return datarev   
-    '''
-
 def udp_serv(self):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -183,12 +167,6 @@ def create_folder():
         os.makedirs(f"{os.getcwd()}/resources")
 
 if __name__ == '__main__':
-    leader_ip='192.168.0.141'
-    leader_port=8001
-    hostname = socket.gethostname()
-    node_ip = extract_ip()
-    node_port=8888
-
     data_f_names='resources'
     if(bk.file_exists(data_f_names)):
         resources = bk.get(data_f_names)
