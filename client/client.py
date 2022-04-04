@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 import socket
 import json
 import base64
@@ -295,7 +294,7 @@ class Client:
             elif(operation== "D"):
                 client.delete()
             elif(operation== "E"):
-                os.system('clear' if os.name == 'nt' else 'clear')
+                os.system('cls' if os.name == 'nt' else 'clear')
                 print("Bye :)")
                 break
             else:
