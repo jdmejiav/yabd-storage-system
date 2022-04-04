@@ -58,3 +58,14 @@ To kill the docker-compose run
 ```bash
 docker-compose kill -s SIGINT
 ```
+To delete images
+
+```bash
+docker image rm leader follower
+```
+
+To kill all process and containers
+
+```bash
+docker system prune
+```
