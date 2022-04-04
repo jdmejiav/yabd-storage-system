@@ -16,7 +16,7 @@ services:
     image: follower
     volumes:
       - type: bind
-        source: /home/estebangt/resources/follower0
+        source: /home/ubuntu/follower0
         target: /app
     ports: 
       - 8880:8888
@@ -30,7 +30,7 @@ services:
     image: follower
     volumes:
       - type: bind
-        source: /home/estebangt/resources/follower1
+        source: /home/ubuntu/follower1
         target: /app
     ports: 
       - 8881:8888
@@ -43,7 +43,7 @@ services:
     image: follower
     volumes:
       - type: bind
-        source: /home/estebangt/resources/follower2
+        source: /home/ubuntu/follower2
         target: /app
     ports: 
       - 8882:8888
@@ -56,7 +56,7 @@ services:
     image: follower
     volumes:
       - type: bind
-        source: /home/estebangt/resources/follower3
+        source: /home/ubuntu/follower3
         target: /app
     ports: 
       - 8883:8888
@@ -70,7 +70,7 @@ services:
     image: follower
     volumes:
       - type: bind
-        source: /home/estebangt/resources/follower4
+        source: /home/ubuntu/follower4
         target: /app
     ports: 
       - 8884:8888
@@ -84,7 +84,7 @@ services:
     image: follower
     volumes:
       - type: bind
-        source: /home/estebangt/resources/follower5
+        source: /home/ubuntu/follower5
         target: /app
     ports: 
       - 8885:8888
@@ -100,4 +100,3 @@ networks:
     ipam:
       config:
         - subnet: 172.16.238.0/24
-          gateway: 172.16.238.1
