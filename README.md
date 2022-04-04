@@ -76,3 +76,9 @@ To kill all process and containers
 ```bash
 docker system prune
 ```
+
+To kill docker process 
+
+```bash
+sudo ps -A | grep docker
+```
