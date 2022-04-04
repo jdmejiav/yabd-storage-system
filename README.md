@@ -8,36 +8,15 @@ To run the client, leader o follower you need to do these steps
 
 ## Client setup
 
-First you need to install Python 3 then you need to run this command:
-
-```bash
-pip install -r requirements.txt
-```
-
-once you run the command you need to execute this command on your CLI.
-
-```bash
-Windows: python client.py
-Linux: python3 client.py
-```
+[Visit Client setup](https://github.com/jdmejiav/yabd-storage-system/blob/541dd72f10278edcc648a803f77b23e707ee39b1/client/README.md)
 
 ## Leader
 
-To run the leader you don't need to install any library, leader works with Python vanilla build-in libraries
-
-```bash
-Windows: python leader.py
-Linux: python3 leader.py
-```
+[Visit Leader setup](https://github.com/jdmejiav/yabd-storage-system/blob/541dd72f10278edcc648a803f77b23e707ee39b1/leader/README.md)
 
 ## Follower
 
-To run the follower you don't need to install any library, follower works with Python vanilla build-in libraries
-
-```bash
-Windows: python follower.py
-Linux: python3 follower.py
-```
+[Visit Leader setup](https://github.com/jdmejiav/yabd-storage-system/blob/541dd72f10278edcc648a803f77b23e707ee39b1/follower/README.md)
 
 ## Note
 
