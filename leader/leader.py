@@ -35,20 +35,23 @@ def ping_udp(host,port):
         if(host in not_available):
             not_available.remove(host)
         bk.save(nodes,'peers')
+        update_table_sensei(SenseiIP,SenseiPort)
     except socket.error:
         nodes['f'][host][1]=0
         if(host not in not_available):
             not_available.append(host)
         bk.save(nodes,'peers')
+        update_table_sensei(SenseiIP,SenseiPort)
         #raise ValueError("Failed")
     finally:
         #print('closing socket')
         sock.close()
 
 def get_states():
+    nodestemp = nodes.copy()
     while True:
         if len(nodes)>0:
-            for key, value in nodes['f'].items():
+            for key, value in nodestemp['f'].items():
                 ping_udp(key,value[0])
             sleep(2)
 
@@ -131,6 +134,7 @@ def delete(c,msg:dict):
             if is_the_same:
                 del resources[data_key]
                 bk.save(resources,'resources')
+                update_table_sensei(SenseiIP,SenseiPort)
                 res = {
                     "message":"Success!! key removed",
                     "status":1
@@ -150,7 +154,7 @@ def delete(c,msg:dict):
                 c.send(message_header+res_json)   
         except:
             raise ValueError('Error!! failed to remove the key')             
-def get(c,msg:dict):
+def getdeprecated(c,msg:dict):
     print(msg)
     op=msg["op"]
     if(op==1):
@@ -217,6 +221,34 @@ def get(c,msg:dict):
         message_header = f"{len(res_json):<{30}}".encode("utf-8") 
         c.send(message_header+res_json)
 
+def get(c,msg:dict):
+    op=msg["op"]
+    if(op==1):
+        dict={
+            "res":"ok",
+            "result":1
+        }
+        c.send(json.dumps(dict).encode())
+    elif(op==0):
+        if msg['key'] not in resources:
+            raise ValueError('Error!! key not found')
+        else:
+            data_key = msg['key']
+            resources_file=resources[data_key]['resources']
+            resources_file = resources_file.encode("utf-8")  
+            message_header = f"{len(resources_file):<{30}}".encode("utf-8") 
+            c.send(message_header+resources_file)
+
+def update_table_sensei(HOST,PORT):
+    message = json.dumps({"data":[resources,nodes]})
+    message = message.encode("utf-8")
+    message_header = f"{len(message):<{30}}".encode("utf-8")
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.connect((HOST,PORT))
+        sock.sendall(message_header + message)
+
+        sock.close()
+
 def post(dict,servers,inf):
     names = list(dict.keys())  
     resources[inf["key"]]={"resources":{},"name":inf["name"],"format":inf["ext"]}
@@ -238,6 +270,7 @@ def post(dict,servers,inf):
             sendToFollowers(filePart,message_part_header,key,value[0])             
     (resources[inf["key"]])["resources"]=file_resources
     bk.save(resources,'resources')
+    update_table_sensei(SenseiIP,SenseiPort)
 
 def update(c,msg:dict):
     data = b''
@@ -257,6 +290,8 @@ def get_node_inf(node_inf):
     if(node_inf["ip"] not in nodes["f"]):
         nodes["f"][node_inf["ip"]]=[node_inf["port"],1]
         bk.save(nodes,'peers')
+        update_table_sensei(SenseiIP,SenseiPort)
+
     print(nodes)
 
 # thread function
@@ -380,5 +415,8 @@ if __name__ == '__main__':
     if(bk.file_exists(resources_f_names)):
         resources = bk.get(resources_f_names)
     #Main()
+    SenseiIP='172.16.238.201'
+    SenseiPort=8002
+    update_table_sensei(SenseiIP,SenseiPort)
     th1= threading.Thread(target= Main).start()
     th2= threading.Thread(target=get_states).start()
