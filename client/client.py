@@ -9,7 +9,7 @@ from alive_progress import alive_bar
 
 def logo():
     print(r"""\
-  /$$     /$$              /$$ /$$                 ╓▄▄▄▄▄▄,
+ /$$     /$$              /$$ /$$                 ╓▄▄▄▄▄▄,
 |  $$   /$$/             | $$| $$                ╫█      ▐▓
  \  $$ /$$//$$$$$$   /$$$$$$$| $$$$$$$           ╫█▄▄▄▄▄▄▐▓
   \  $$$$/|____  $$ /$$__  $$| $$__  $$          ╫█      ▐▓
@@ -41,12 +41,16 @@ def browseFiles():
 
 class Client:   
 
-    def delete(self):
+    def delete(self,datakey=''):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect((self.HOST,self.PORT))
         #client_socket.setblocking(False)
 
-        key_obj = input("Enter key of the object to delete: ")
+        key_obj=''
+        if datakey =='':
+            key_obj = input("Enter key of the object: ")
+        else:
+            key_obj = datakey
 
         message = ''
 
@@ -58,13 +62,13 @@ class Client:
 
         message = message.encode("utf-8")
         message_header = f"{len(message):<{self.HEADER_LENGTH}}".encode("utf-8")
-        client_socket.send(message_header + message)
+        client_socket.sendall(message_header + message)
 
         datarev=b''
         message_header = client_socket.recv(30)
         message_length = int(message_header.decode("utf-8").strip())
         while len(datarev)<message_length:
-            res_data=client_socket.recv(30000)
+            res_data=client_socket.recv(30720)
             datarev+=res_data
         res=json.loads(datarev)
         if "status" in res:
@@ -78,13 +82,15 @@ class Client:
         del client_socket
         return datarev
 
-    def read(self):
+    def read(self,datakey=''):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect((self.HOST,self.PORT))
         #client_socket.setblocking(False)
-
-        key_obj = input("Enter key of the object: ")
-
+        key_obj=''
+        if datakey =='':
+            key_obj = input("Enter key of the object: ")
+        else:
+            key_obj = datakey
         message = ''
 
         getMessage ={   
@@ -97,14 +103,14 @@ class Client:
         if message:
             message = message.encode("utf-8")
             message_header = f"{len(message):<{self.HEADER_LENGTH}}".encode("utf-8")
-            client_socket.send(message_header + message)
+            client_socket.sendall(message_header + message)
 
         datarev=b''
         message_header = client_socket.recv(30)
         message_length = int(message_header.decode("utf-8").strip())
         with alive_bar(message_length,title=f'Downloading') as bar:   # default setting
             while len(datarev)<message_length:
-                res_data=client_socket.recv(30000)
+                res_data=client_socket.recv(30720)
                 datarev+=res_data
                 bar(len(res_data)) 
             res=json.loads(datarev)
@@ -112,7 +118,7 @@ class Client:
             if res["status"] ==-1:
                 print('\033[91m' + res["message"] + '\033[0m')
             else:
-                if(res["ext"]!='./yadbdatatxt'):
+                if(res["ext"]!='.yadbdatatxt'):
                     with open(f'{res["name"]}{res["ext"]}', "wb") as new_file:
                             new_file.write(base64.b64decode(res['data']))
                     client_socket.close()
@@ -168,7 +174,7 @@ class Client:
             self.objects[datakey] = {   
                                         "key": datakey,
                                         "name": "nameout",
-                                        "extention": "./yadbdatatxt",
+                                        "extention": ".yadbdatatxt",
                                         "method": "UPDATE",
                                         "body": encoded.decode('ascii'),
                                     }
@@ -181,15 +187,17 @@ class Client:
         if message:
             message = message.encode("utf-8")
             message_header = f"{len(message):<{self.HEADER_LENGTH}}".encode("utf-8")
-            client_socket.send(message_header + message)
+            client_socket.sendall(message_header + message)
             res=b''
             while True:
-                data=client_socket.recv(30000)
+                data=client_socket.recv(1024)
                 if not data:
                     break
                 else:
                     res+=data
+            print(type(res),res)
             res = json.loads(res)
+            print(res)
             if "status" in res:
                 if res["status"]==-1: 
                     print('\033[93m' + res["message"] + '\033[0m')
@@ -248,7 +256,7 @@ class Client:
             self.objects[datakey] = {   
                                         "key": datakey,
                                         "name": "nameout",
-                                        "extention": "./yadbdatatxt",
+                                        "extention": ".yadbdatatxt",
                                         "method": "POST",
                                         "body": encoded.decode('ascii'),
                                     }
@@ -261,10 +269,10 @@ class Client:
         if message:
             message = message.encode("utf-8")
             message_header = f"{len(message):<{self.HEADER_LENGTH}}".encode("utf-8")
-            client_socket.send(message_header + message)
+            client_socket.sendall(message_header + message)
             res=b''
             while True:
-                data=client_socket.recv(30000)
+                data=client_socket.recv(30720)
                 if not data:
                     break
                 else:
@@ -310,6 +318,10 @@ class Client:
         self.objects = {}
 
 if __name__=='__main__':
-    client = Client("54.226.31.101",8001)
+    client = Client("35.171.27.171",8001)
     logo()
     client.interface()
+    #client.create("camilo","juega lol")
+    #client.read("camilo")
+    #client.update("camilo","Recapacito y dejo el lol")
+    #client.delete("camilo")
