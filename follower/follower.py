@@ -174,7 +174,7 @@ if __name__ == '__main__':
     create_folder()
 
     self={
-        "LEADER_IP":'192.168.0.141',
+        "LEADER_IP":'172.16.238.200',
         "LEADER_PORT":8001,
         "HOSTNAME" : socket.gethostname(),
         "HOST" : extract_ip(),

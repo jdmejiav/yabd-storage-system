@@ -1,8 +1,31 @@
 version: '3.4'
 
 services:
+
+  sensei:
+    image: sensei
+    volumes:
+      - type: bind
+        source: /home/ubuntu/sensei
+        target: /app
+    ports: 
+      - 8000:8000
+      - 8002:8002
+    
+    build:
+      context: .
+      dockerfile: ./sensei/Dockerfile
+    networks:
+      backend:
+        ipv4_address: 172.16.238.201
+    
+
   leader:
     image: leader
+    volumes:
+      - type: bind
+        source: /home/ubuntu/leader
+        target: /app
     ports: 
       - 8001:8001
     build:
@@ -11,6 +34,9 @@ services:
     networks:
       backend:
         ipv4_address: 172.16.238.200
+    depends_on:
+      - sensei
+    
   
   follower0:
     image: follower
@@ -24,7 +50,9 @@ services:
       context: .
       dockerfile: ./follower/Dockerfile   
     networks:
-      - backend 
+      - backend
+    depends_on:
+      - leader
   
   follower1:
     image: follower
@@ -38,7 +66,10 @@ services:
       context: .
       dockerfile: ./follower/Dockerfile   
     networks:
-      - backend 
+      - backend
+    depends_on:
+      - leader
+   
   follower2:
     image: follower
     volumes:
@@ -51,7 +82,9 @@ services:
       context: .
       dockerfile: ./follower/Dockerfile   
     networks:
-      - backend 
+      - backend
+    depends_on:
+      - leader 
   follower3:
     image: follower
     volumes:
@@ -64,7 +97,9 @@ services:
       context: .
       dockerfile: ./follower/Dockerfile   
     networks:
-      - backend 
+      - backend
+    depends_on:
+      - leader 
 
   follower4:
     image: follower
@@ -78,7 +113,9 @@ services:
       context: .
       dockerfile: ./follower/Dockerfile   
     networks:
-      - backend 
+      - backend
+    depends_on:
+      - leader 
 
   follower5:
     image: follower
@@ -92,7 +129,9 @@ services:
       context: .
       dockerfile: ./follower/Dockerfile   
     networks:
-      - backend  
+      - backend
+    depends_on:
+      - leader  
 
 networks:
   backend:
