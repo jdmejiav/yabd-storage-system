@@ -2,7 +2,7 @@
 
 # Setup
 
-To run the Leader follow these steps, remember to install python version 3 suggested 3.8 or above
+To run the Sensei follow these steps, remember to install python version 3 suggested 3.8 or above
 
 ## Sensei setup
 
