@@ -13,8 +13,8 @@ The only step that you need to follow is to install python version 3, Sensei onl
 Once you run the command you need to execute this command on your CLI.
 
 ```bash
-Windows: python leader.py
-Linux: python3 leader.py
+Windows: python sensei.py
+Linux: python3 sensei.py
 ```
 
 ## Exit
