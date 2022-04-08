@@ -1,5 +1,4 @@
 # import socket programming library
-from re import T
 import socket
 import json
 # import thread module
@@ -60,7 +59,7 @@ def sendToFollowers(file,message_header,HOST,PORT):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((HOST, PORT))
         sock.send(message_header+file)
-        print(sock.recv(30000).decode())
+        print(sock.recv(30720).decode())
         sock.close()
 
 def ckeckList(lst):
@@ -288,7 +287,7 @@ def update(c,msg:dict):
 
 def get_node_inf(node_inf):
     if(node_inf["ip"] not in nodes["f"]):
-        nodes["f"][node_inf["ip"]]=[node_inf["port"],1]
+        nodes["f"][node_inf["ip"]]=[node_inf["port"],1,node_inf["publicip"]]
         bk.save(nodes,'peers')
         update_table_sensei(SenseiIP,SenseiPort)
 
@@ -415,7 +414,7 @@ if __name__ == '__main__':
     if(bk.file_exists(resources_f_names)):
         resources = bk.get(resources_f_names)
     #Main()
-    SenseiIP='172.16.238.201'
+    SenseiIP='172.31.54.60'
     SenseiPort=8002
     update_table_sensei(SenseiIP,SenseiPort)
     th1= threading.Thread(target= Main).start()
