@@ -1,5 +1,4 @@
 # import socket programming library
-from re import T
 import socket
 import json
 # import thread module
@@ -81,7 +80,7 @@ def threaded(c):
             
             message_length = int(message_header.decode("utf-8").strip())
             while len(data)<message_length:
-                data += c.recv(30000) 
+                data += c.recv(30720) 
             print_lock.release() 
         except:
             print_lock.release() 
@@ -130,6 +129,7 @@ def Main(HOST,PORT):
 
 if __name__ == '__main__':
     host = extract_ip()
+    print(host)
     port_for_leader = 8002
     port_for_client = 8000
     nodes_f_names='peers'
