@@ -2,12 +2,13 @@ import socket
 import json
 import backup as bk
 import os
+import urllib.request
 
 # import thread module
 from _thread import *
 import threading
 
-#print_lock = threading.Lock()
+print_lock = threading.Lock()
 
 resources=[]
 
@@ -29,7 +30,7 @@ def receive_message(self,client_socket):
         
         message_length = int(message_header.decode("utf-8").strip())
         while len(data)<message_length:
-            data += client_socket.recv(30000)    
+            data += client_socket.recv(30720)    
     except:
         pass
     return data
@@ -42,23 +43,30 @@ def return_data(data:dict,self,con):
     message=file.encode("utf-8")
     message_header = f"{len(message):<{30}}".encode("utf-8")
     con.send(message_header+message)
-    print(con.recv(30000).decode())
+    print(con.recv(1024).decode())
 
-def threaded(self,con):
-    key = receive_message(self,con)
-    decoded = key # b'data to be encoded'
-    dict = json.loads(decoded)
-    method=dict['method']
-    if(method=='POST'):
-        decoded2=dict["body"]
-        with open(f'{os.getcwd()}/resources/{dict["name"]}', "w") as new_file:
-            new_file.write(decoded2)
-        resources.append(dict["name"])
-        bk.save(resources,'resources')
-        con.sendall(b'Funciona Pa')
-    elif(method=='GET'):
-        print("require resources")
-        return_data(dict,self,con)        
+def threaded(con,self):
+    try:
+        key = receive_message(self,con)
+        print_lock.release() 
+        decoded = key # b'data to be encoded'
+        dict = json.loads(decoded)
+        method=dict['method']
+        if(method=='POST'):
+            decoded2=dict["body"]
+            with open(f'{os.getcwd()}/resources/{dict["name"]}', "w") as new_file:
+                new_file.write(decoded2)
+            resources.append(dict["name"])
+            bk.save(resources,'resources')
+            con.sendall(b'Funciona Pa')
+        elif(method=='GET'):
+            print("require resources")
+            return_data(dict,self,con) 
+        elif(method=='DELETE'):
+            delete(dict,self,con)
+        #print_lock.release() 
+    except:
+        con.sendall(b'No funciona Pa')
 
 def delete(dict,self,con):
     print("Deleting")
@@ -100,25 +108,11 @@ def listener_sock(self):
         con,addr = server_socket.accept()
 
         # lock acquired by client
+        print_lock.acquire()
         print('Connected to :', addr[0], ':', addr[1])
 
-        key = receive_message(self,con)
-        decoded = key # b'data to be encoded'
-        dict = json.loads(decoded)
-        method=dict['method']
-        if(method=='POST'):
-            decoded2=dict["body"]
-            with open(f'{os.getcwd()}/resources/{dict["name"]}', "w") as new_file:
-                new_file.write(decoded2)
-            resources.append(dict["name"])
-            bk.save(resources,'resources')
-            con.sendall(b'Funciona Pa')
-        elif(method=='GET'):
-            print("require resources")
-            return_data(dict,self,con) 
-        elif(method=='DELETE'):
-            delete(dict,self,con)
-        #print_lock.release() 
+        # Start a new thread and return its identifier
+        start_new_thread(threaded, (con,self,))
 
 
 def reveal_to_leader(self): 
@@ -130,6 +124,7 @@ def reveal_to_leader(self):
 
     getMessage ={   
         "ip":self["HOST"],
+        "publicip":self["PUBLIC_IP"],
         "nodeName":self["HOSTNAME"],
         "port":self["PORT"],
         "method":"reveal"
@@ -174,12 +169,13 @@ if __name__ == '__main__':
     create_folder()
 
     self={
-        "LEADER_IP":'172.16.238.200',
+        "LEADER_IP":'172.31.49.109',
         "LEADER_PORT":8001,
         "HOSTNAME" : socket.gethostname(),
         "HOST" : extract_ip(),
         "PORT":8888,
         "HEADER_LENGTH": 30,
+        "PUBLIC_IP":urllib.request.urlopen('https://ident.me').read().decode('utf8')
     }
     reveal_to_leader(self)
     #print_lock.acquire()
