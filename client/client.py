@@ -83,7 +83,6 @@ class Client:
         return datarev
 
     def read(self,datakey=''):
-        try:
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             client_socket.connect((self.HOSTSENSEI,self.PORTSENSEI))
             #client_socket.setblocking(False)
@@ -111,7 +110,7 @@ class Client:
             client_socket.close()
             
             dict= json.loads(datares)
-
+            print(dict)
             resources_file=dict['data'][0][key_obj]['resources']
             nodes= dict['data'][1]
             data = ''.encode()
@@ -121,10 +120,9 @@ class Client:
                 i=0
                 while i <len(value):
                     if ip[value[i]][1]==1:
-                        node_to_get=(value[i],ip[value[i]][0])
+                        node_to_get=(ip[value[i]][2],ip[value[i]][0])
                         i=len(value)+1
                     i+=1
-
                 print(f'Recovering data from {node_to_get}')
                 getMessage ={   
                     "key": key,
@@ -137,7 +135,7 @@ class Client:
                     sock.connect(node_to_get)
                     sock.send(message_header + message)
 
-                    print(f'connected with {value[0]}, {ip[value[0]][0]}')
+                    print(f'connected with {node_to_get}')
 
                     message_header=b''
 
@@ -162,10 +160,7 @@ class Client:
             else:
                 print('\033[92m' + "Success!! data recovered" +'\033[0m')
                 print("Data->",base64.b64decode(data).decode())
-        except:
-            print('\033[93m' + "Warning!! key not exists" +'\033[0m')
-
-
+   
     def update(self,datakey='',datavalue=''):
         message = ''
         if datakey == '':
@@ -356,7 +351,7 @@ class Client:
         self.objects = {}
 
 if __name__=='__main__':
-    client = Client("127.0.0.1",8001,'127.0.0.1',8000)
+    client = Client("54.146.78.221",8001,'54.90.52.0',8000)
     logo()
     client.interface()
     #client.create("camilo","juega lol")
