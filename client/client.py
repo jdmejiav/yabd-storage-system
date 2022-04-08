@@ -351,7 +351,7 @@ class Client:
         self.objects = {}
 
 if __name__=='__main__':
-    client = Client("54.146.78.221",8001,'54.90.52.0',8000)
+    client = Client("3.224.252.48",8001,'3.225.177.119',8000)
     logo()
     client.interface()
     #client.create("camilo","juega lol")
