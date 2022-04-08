@@ -111,55 +111,63 @@ class Client:
             
             dict= json.loads(datares)
             print(dict)
-            resources_file=dict['data'][0][key_obj]['resources']
-            nodes= dict['data'][1]
-            data = ''.encode()
-            for key, value in reversed(resources_file.items()):
-                ip=nodes['f']
-                node_to_get=()
-                i=0
-                while i <len(value):
-                    if ip[value[i]][1]==1:
-                        node_to_get=(ip[value[i]][2],ip[value[i]][0])
-                        i=len(value)+1
-                    i+=1
-                print(f'Recovering data from {node_to_get}')
-                getMessage ={   
-                    "key": key,
-                    "method": "GET",
-                }
-                message = json.dumps(getMessage)
-                message = message.encode("utf-8")
-                message_header = f"{len(message):<{30}}".encode("utf-8")
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-                    sock.connect(node_to_get)
-                    sock.send(message_header + message)
 
-                    print(f'connected with {node_to_get}')
-
-                    message_header=b''
-
-                    message_header = sock.recv(30)
-                    message_length = int(message_header.decode("utf-8").strip())
-                    data_node=''.encode()
-                    with alive_bar(message_length,title=f'Downloading {key}') as bar:   # default setting
-                        while len(data_node)<message_length:
-                            res_data=sock.recv(30720)
-                            data_node += res_data
-                            bar(len(res_data)) 
-                    sock.send(b'ok')                       
-                    sock.close()
-                    data+=data_node
-                    del sock
-            fname= dict['data'][0][key_obj]['name']
-            fext= dict['data'][0][key_obj]['format']
-            if(fext!='.yadbdatatxt'):
-                with open(f'{fname}{fext}', "wb") as new_file:
-                        new_file.write(base64.b64decode(data))
-                print('\033[92m' + "Success!! data saved on file "+fname+fext+ '\033[0m')
+            if "status" in dict:
+                if dict["status"]==-1: 
+                    print('\033[93m' + dict["message"] + '\033[0m')
+                elif dict["status"]==-2:
+                    print('\033[91m' + dict["message"] + '\033[0m')
             else:
-                print('\033[92m' + "Success!! data recovered" +'\033[0m')
-                print("Data->",base64.b64decode(data).decode())
+                resources_file=dict['data'][0][key_obj]['resources']
+                nodes= dict['data'][1]
+                data = ''.encode()
+                for key, value in reversed(resources_file.items()):
+                    ip=nodes['f']
+                    node_to_get=()
+                    i=0
+                    while i <len(value):
+                        if ip[value[i]][1]==1:
+                            node_to_get=(ip[value[i]][2],ip[value[i]][0])
+                            i=len(value)+1
+                        i+=1
+                    print(f'Recovering data from {node_to_get}')
+                    getMessage ={   
+                        "key": key,
+                        "method": "GET",
+                    }
+                    message = json.dumps(getMessage)
+                    message = message.encode("utf-8")
+                    message_header = f"{len(message):<{30}}".encode("utf-8")
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                        sock.connect(node_to_get)
+                        sock.send(message_header + message)
+
+                        print(f'connected with {node_to_get}')
+
+                        message_header=b''
+
+                        message_header = sock.recv(30)
+                        message_length = int(message_header.decode("utf-8").strip())
+                        data_node=''.encode()
+                        with alive_bar(message_length,title=f'Downloading {key}') as bar:   # default setting
+                            while len(data_node)<message_length:
+                                res_data=sock.recv(30720)
+                                data_node += res_data
+                                bar(len(res_data)) 
+                        sock.send(b'ok')                       
+                        sock.close()
+                        data+=data_node
+                        del sock
+                fname= dict['data'][0][key_obj]['name']
+                fext= dict['data'][0][key_obj]['format']
+                if(fext!='.yadbdatatxt'):
+                    with open(f'{fname}{fext}', "wb") as new_file:
+                            new_file.write(base64.b64decode(data))
+                    print('\033[92m' + "Success!! data saved on file "+fname+fext+ '\033[0m')
+                else:
+                    print('\033[92m' + "Success!! data recovered" +'\033[0m')
+                    print("Data->",base64.b64decode(data).decode())
+
    
     def update(self,datakey='',datavalue=''):
         message = ''
